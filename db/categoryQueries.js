@@ -6,13 +6,10 @@ async function getCategories() {
 }
 
 async function getCategory(id) {
-  if (!id) {
-    throw new Error("id is required");
-  }
-
-  const { rows, rowCount } = await pool.query("SELECT * FROM categories WHERE id = $1", [
-    id,
-  ]);
+  const { rows, rowCount } = await pool.query(
+    "SELECT * FROM categories WHERE id = $1",
+    [id]
+  );
 
   if (rowCount === 0) {
     throw new Error("Category not found");
@@ -52,10 +49,6 @@ async function addCategory(name, description = null) {
 }
 
 async function updateCategory(id, name = null, description = null) {
-  if (!id) {
-    throw new Error("id is required");
-  }
-
   let response;
   if (name && description) {
     response = await pool.query(
@@ -84,10 +77,6 @@ async function updateCategory(id, name = null, description = null) {
 }
 
 async function deleteCategory(id) {
-  if (!id) {
-    throw new Error("id is required");
-  }
-
   const { rows, rowCount } = await pool.query(
     "DELETE FROM categories WHERE id = $1 RETURNING *",
     [id]
