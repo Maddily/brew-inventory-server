@@ -32,20 +32,12 @@ async function addCategory(name, description = null) {
     throw new Error("Category already exists");
   }
 
-  let response;
-  if (description) {
-    response = await pool.query(
-      "INSERT INTO categories (name, description) VALUES ($1, $2) RETURNING *",
-      [name, description]
-    );
-  } else {
-    response = await pool.query(
-      "INSERT INTO categories (name) VALUES ($1) RETURNING *",
-      [name]
-    );
-  }
+  const { rows } = await pool.query(
+    "INSERT INTO categories (name, description) VALUES ($1, $2) RETURNING *",
+    [name, description]
+  );
 
-  return response.rows[0];
+  return rows[0];
 }
 
 async function updateCategory(id, name = null, description = null) {
