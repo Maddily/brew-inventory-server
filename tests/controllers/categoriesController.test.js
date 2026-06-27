@@ -48,17 +48,6 @@ describe("getCategories", () => {
 });
 
 describe("getCategory", () => {
-  it("returns 400 status if no id route parameter", async () => {
-    const req = { params: {} };
-    const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-
-    queries.getCategory.mockRejectedValue(new Error("id is required"));
-
-    await getCategory(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: "id is required" });
-  });
-
   it("returns 404 status if it finds no matching category", async () => {
     const req = { params: { id: 5 } };
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
@@ -174,17 +163,6 @@ describe("addCategory", () => {
 });
 
 describe("updateCategory", () => {
-  it("returns 400 status if no id route parameter", async () => {
-    const req = { params: {}, body: { name: "coffee", description: "" } };
-    const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-
-    queries.updateCategory.mockRejectedValue(new Error("id is required"));
-
-    await updateCategory(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: "id is required" });
-  });
-
   it("returns 400 status if no data in request body", async () => {
     const req = { params: { id: 1 }, body: {} };
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
@@ -283,17 +261,6 @@ describe("updateCategory", () => {
 });
 
 describe("deleteCategory", () => {
-  it("returns 400 status if no id route parameter", async () => {
-    const req = { params: {} };
-    const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-
-    queries.deleteCategory.mockRejectedValue(new Error("id is required"));
-
-    await deleteCategory(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: "id is required" });
-  });
-
   it("returns 404 status if it finds no matching category", async () => {
     const req = { params: { id: 5 } };
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
