@@ -2,7 +2,7 @@ const pool = require("./pool.js");
 
 async function getProducts(categoryID = null) {
   if (!categoryID) {
-    const { rows } = await pool.query("SELECT * FROM products");
+    const { rows } = await pool.query("SELECT * FROM products ORDER BY id");
     return rows;
   }
 
