@@ -16,10 +16,6 @@ async function getCategory(req, res) {
     res.json(category);
   } catch (error) {
     switch (error.message) {
-      case "id is required": {
-        res.status(400).json({ error: error.message });
-        break;
-      }
       case "Category not found": {
         res.status(404).json({ error: error.message });
         break;
@@ -65,7 +61,6 @@ async function updateCategory(req, res) {
     res.json(category);
   } catch (error) {
     switch (error.message) {
-      case "id is required":
       case "Either name or description is required": {
         res.status(400).json({ error: error.message });
         break;
@@ -88,10 +83,6 @@ async function deleteCategory(req, res) {
     res.json(category);
   } catch (error) {
     switch (error.message) {
-      case "id is required": {
-        res.status(400).json({ error: error.message });
-        break;
-      }
       case "Category not found": {
         res.status(404).json({ error: error.message });
         break;
