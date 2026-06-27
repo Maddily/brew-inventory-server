@@ -15,14 +15,10 @@ async function getCategory(req, res) {
     const category = await categoryQueries.getCategory(id);
     res.json(category);
   } catch (error) {
-    switch (error.message) {
-      case "Category not found": {
-        res.status(404).json({ error: error.message });
-        break;
-      }
-      default: {
-        res.status(500).json({ error: error.message });
-      }
+    if (error.message === "Category not found") {
+      res.status(404).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: error.message });
     }
   }
 }
@@ -82,14 +78,10 @@ async function deleteCategory(req, res) {
     const category = await categoryQueries.deleteCategory(id);
     res.json(category);
   } catch (error) {
-    switch (error.message) {
-      case "Category not found": {
-        res.status(404).json({ error: error.message });
-        break;
-      }
-      default: {
-        res.status(500).json({ error: error.message });
-      }
+    if (error.message === "Category not found") {
+      res.status(404).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: error.message });
     }
   }
 }
