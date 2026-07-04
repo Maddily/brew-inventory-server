@@ -2,13 +2,22 @@ const pool = require("./pool.js");
 
 async function getProducts(categoryID = null) {
   if (!categoryID) {
-    const { rows } = await pool.query("SELECT * FROM products ORDER BY id");
+    const { rows } = await pool.query(
+      `
+    SELECT products.*, categories.name AS category
+    FROM products
+    JOIN categories ON products.category_id = categories.id
+    ORDER BY id
+    `
+    );
     return rows;
   }
 
   const { rows } = await pool.query(
     `
-    SELECT * FROM products
+    SELECT products.*, categories.name AS category
+    FROM products
+    JOIN categories ON products.category_id = categories.id
     WHERE
       category_id = $1
     ORDER BY id
