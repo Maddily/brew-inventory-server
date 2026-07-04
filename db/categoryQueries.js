@@ -1,7 +1,19 @@
 const pool = require("./pool.js");
 
 async function getCategories() {
-  const { rows } = await pool.query("SELECT * FROM categories ORDER BY id");
+  const { rows } = await pool.query(
+    `
+    SELECT
+      categories.id,
+      categories.name,
+      categories.description,
+      COUNT(products.id) AS product_count
+    FROM categories 
+    LEFT JOIN products ON categories.id = products.category_id
+    GROUP BY categories.id
+    ORDER BY categories.id
+    `
+  );
   return rows;
 }
 
