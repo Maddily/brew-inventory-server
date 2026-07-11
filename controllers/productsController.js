@@ -3,8 +3,11 @@ const productQueries = require("../db/productQueries.js");
 async function getProducts(req, res) {
   try {
     // Remember to implement filtering by attributes
-    const { category_id } = req.query;
-    const products = await productQueries.getProducts(category_id);
+    const { category_id, availability } = req.query;
+    const products = await productQueries.getProducts(
+      category_id,
+      availability
+    );
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
