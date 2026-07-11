@@ -1,30 +1,45 @@
 const pool = require("./pool.js");
 
-async function getProducts(categoryID = null) {
-  if (!categoryID) {
-    const { rows } = await pool.query(
-      `
-    SELECT products.*, categories.name AS category
-    FROM products
-    JOIN categories ON products.category_id = categories.id
-    ORDER BY id
-    `
-    );
-    return rows;
+async function getProducts(categoryIds = null, availability = null) {
+  let values = [];
+
+  const availabilityConditions = {
+    "In stock": "stock_quantity > 10",
+    "Low stock": "stock_quantity > 0 AND stock_quantity <= 10",
+    "Out of stock": "stock_quantity = 0",
+  };
+  const availabilityArray = Array.isArray(availability)
+    ? availability
+    : [availability];
+
+  const whereClauses = [];
+
+  if (categoryIds) {
+    const idArray = Array.isArray(categoryIds) ? categoryIds : [categoryIds];
+    const placeholders = idArray.map((_, i) => `$${i + 1}`).join(", ");
+
+    whereClauses.push(`category_id IN (${placeholders})`);
+    values = idArray;
   }
 
-  const { rows } = await pool.query(
-    `
+  if (availability && availabilityArray.length < 3) {
+    const conditions = availabilityArray.map((a) => availabilityConditions[a]);
+    whereClauses.push(`(${conditions.join(" OR ")})`);
+  }
+
+  const whereSQL = whereClauses.length
+    ? `WHERE ${whereClauses.join(" AND ")}`
+    : "";
+
+  const SQL = `
     SELECT products.*, categories.name AS category
     FROM products
     JOIN categories ON products.category_id = categories.id
-    WHERE
-      category_id = $1
+    ${whereSQL}
     ORDER BY id
-    `,
-    [categoryID]
-  );
+    `;
 
+  const { rows } = await pool.query(SQL, values);
   return rows;
 }
 
