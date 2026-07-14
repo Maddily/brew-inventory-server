@@ -53,7 +53,7 @@ describe("getProducts", () => {
     ]);
 
     await getProducts(req, res);
-    expect(queries.getProducts).toHaveBeenCalledWith(undefined, undefined);
+    expect(queries.getProducts).toHaveBeenCalledWith(undefined, undefined, {});
     expect(res.json).toHaveBeenCalledWith([
       {
         id: 1,
@@ -98,7 +98,7 @@ describe("getProducts", () => {
     ]);
 
     await getProducts(req, res);
-    expect(queries.getProducts).toHaveBeenCalledWith(1, undefined);
+    expect(queries.getProducts).toHaveBeenCalledWith(1, undefined, {});
     expect(res.json).toHaveBeenCalledWith([
       {
         id: 1,
