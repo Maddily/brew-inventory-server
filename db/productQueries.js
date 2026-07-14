@@ -1,6 +1,10 @@
 const pool = require("./pool.js");
 
-async function getProducts(categoryIds = null, availability = null) {
+async function getProducts(
+  categoryIds = null,
+  availability = null,
+  attributes = null
+) {
   let values = [];
 
   const availabilityConditions = {
@@ -18,7 +22,7 @@ async function getProducts(categoryIds = null, availability = null) {
     const idArray = Array.isArray(categoryIds) ? categoryIds : [categoryIds];
     const placeholders = idArray.map((_, i) => `$${i + 1}`).join(", ");
 
-    whereClauses.push(`category_id IN (${placeholders})`);
+    whereClauses.push(`products.category_id IN (${placeholders})`);
     values = idArray;
   }
 
@@ -27,16 +31,52 @@ async function getProducts(categoryIds = null, availability = null) {
     whereClauses.push(`(${conditions.join(" OR ")})`);
   }
 
+  if (attributes) {
+    const conditions = [];
+    for (const [attribute, value] of Object.entries(attributes)) {
+      const valueArray = Array.isArray(value) ? value : [value];
+      const startIndex = values.length + 1;
+      values = [...values, ...valueArray];
+      const placeholders = valueArray
+        .map((_, i) => `$${startIndex + i}`)
+        .join(", ");
+
+      conditions.push(
+        `EXISTS (
+          SELECT 1 FROM product_attributes pa
+          JOIN attributes a ON a.id = pa.attribute_id
+          WHERE pa.product_id = products.id
+          AND LOWER(a.name) = LOWER('${attribute}')
+          AND pa.value IN (${placeholders})
+        )`
+      );
+    }
+
+    conditions.length && whereClauses.push(`(${conditions.join(" AND ")})`);
+  }
+
   const whereSQL = whereClauses.length
     ? `WHERE ${whereClauses.join(" AND ")}`
     : "";
 
   const SQL = `
-    SELECT products.*, categories.name AS category
+    SELECT
+      products.*,
+      categories.name AS category,
+      attributes.name AS attribute_name,
+      product_attributes.value AS attribute_value
     FROM products
     JOIN categories ON products.category_id = categories.id
-    ${whereSQL}
-    ORDER BY id
+    JOIN product_attributes ON products.id = product_attributes.product_id
+    JOIN attributes ON attributes.id = product_attributes.attribute_id
+    WHERE products.id IN (
+      SELECT products.id
+      FROM products
+      JOIN product_attributes ON products.id = product_attributes.product_id
+      JOIN attributes ON attributes.id = product_attributes.attribute_id
+      ${whereSQL}
+    )
+    ORDER BY products.id
     `;
 
   const { rows } = await pool.query(SQL, values);
