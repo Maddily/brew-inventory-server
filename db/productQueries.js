@@ -3,6 +3,7 @@ const pool = require("./pool.js");
 async function getProducts(
   categoryIds = null,
   availability = null,
+  search = null,
   attributes = null
 ) {
   let values = [];
@@ -29,6 +30,11 @@ async function getProducts(
   if (availability && availabilityArray.length < 3) {
     const conditions = availabilityArray.map((a) => availabilityConditions[a]);
     whereClauses.push(`(${conditions.join(" OR ")})`);
+  }
+
+  if (search) {
+    values.push(`%${search}%`);
+    whereClauses.push(`products.name ILIKE $${values.length}`);
   }
 
   if (attributes) {
