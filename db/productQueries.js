@@ -91,7 +91,18 @@ async function getProducts(
 
 async function getProduct(id) {
   const { rows, rowCount } = await pool.query(
-    "SELECT * FROM products WHERE id = $1",
+    `
+    SELECT
+      products.*,
+      categories.name AS category,
+      attributes.name AS attribute_name,
+      product_attributes.value AS attribute_value
+    FROM products
+    JOIN categories ON products.category_id = categories.id
+    JOIN product_attributes ON products.id = product_attributes.product_id
+    JOIN attributes ON product_attributes.attribute_id = attributes.id
+    WHERE products.id = $1
+    `,
     [id]
   );
 
@@ -99,7 +110,7 @@ async function getProduct(id) {
     throw new Error("Product not found");
   }
 
-  return rows[0];
+  return rows;
 }
 
 async function addProduct(
