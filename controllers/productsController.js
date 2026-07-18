@@ -2,10 +2,11 @@ const productQueries = require("../db/productQueries.js");
 
 async function getProducts(req, res) {
   try {
-    const { category_id, availability, ...attributes } = req.query;
+    const { category_id, availability, search, ...attributes } = req.query;
     const products = await productQueries.getProducts(
       category_id,
       availability,
+      search,
       attributes
     );
     res.json(products);
