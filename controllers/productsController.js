@@ -1,4 +1,8 @@
+const { validationResult, matchedData } = require("express-validator");
 const productQueries = require("../db/productQueries.js");
+const {
+  extractAttributes,
+} = require("../middleware/validators/productValidators.js");
 
 async function getProducts(req, res) {
   try {
@@ -110,55 +114,15 @@ async function addProduct(req, res) {
 
 async function updateProduct(req, res) {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { id } = req.params;
-    const { name, description, price, stock_quantity, category_id } = req.body;
-
-    const attributes = {};
-    switch (category_id) {
-      case "1": {
-        attributes["Origin"] = req.body["Origin"];
-        attributes["Roast Level"] = req.body["Roast Level"];
-        attributes["Format"] = req.body["Format"];
-        attributes["Weight"] = req.body["Weight"];
-        break;
-      }
-      case "2": {
-        attributes["Type"] = req.body["Type"];
-        attributes["Origin"] = req.body["Origin"];
-        attributes["Format"] = req.body["Format"];
-        attributes["Caffeine Level"] = req.body["Caffeine Level"];
-        attributes["Weight"] = req.body["Weight"];
-        break;
-      }
-      case "3": {
-        attributes["Base"] = req.body["Base"];
-        attributes["Volume"] = req.body["Volume"];
-        break;
-      }
-      case "4": {
-        attributes["Type"] = req.body["Type"];
-        attributes["Compatible With"] = req.body["Compatible With"];
-        break;
-      }
-    }
-
-    if (
-      [name, description, price, stock_quantity].every(
-        (value) => value === undefined || value === null
-      ) &&
-      Object.values(attributes).every(
-        (value) => value === undefined || value === null
-      )
-    ) {
-      res.status(400).json({ error: "Must provide data to be updated" });
-      return;
-    }
-
-    for (const attribute in attributes) {
-      if (!attributes[attribute]) {
-        delete attributes[attribute];
-      }
-    }
+    const data = matchedData(req);
+    const { name, description, price, stock_quantity, category_id } = data;
+    const attributes = extractAttributes(data);
 
     const product = await productQueries.updateProduct({
       id,
