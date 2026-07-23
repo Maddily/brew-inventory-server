@@ -6,13 +6,16 @@ const {
   updateProduct,
   deleteProduct,
 } = require("../controllers/productsController.js");
+const {
+  validateProduct,
+} = require("../middleware/validators/productValidators.js");
 
 const productsRouter = express.Router();
 
 productsRouter.get("/", getProducts);
 productsRouter.get("/:id", getProduct);
 productsRouter.post("/", addProduct);
-productsRouter.put("/:id", updateProduct);
+productsRouter.put("/:id", validateProduct, updateProduct);
 productsRouter.delete("/:id", deleteProduct);
 
 module.exports = productsRouter;
