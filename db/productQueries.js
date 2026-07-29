@@ -121,7 +121,8 @@ async function addProduct(
   attributes,
   description = null
 ) {
-  await pool.query("BEGIN");
+  const client = await pool.connect();
+  await client.query("BEGIN");
   try {
     const { rows } = await pool.query(
       `INSERT INTO products (name, description, price, stock_quantity, category_id)
@@ -140,11 +141,13 @@ async function addProduct(
         [product.id, attrName, category_id, value]
       );
     }
-    await pool.query("COMMIT");
+    await client.query("COMMIT");
     return product;
   } catch (error) {
-    await pool.query("ROLLBACK");
+    await client.query("ROLLBACK");
     throw error;
+  } finally {
+    client.release();
   }
 }
 
