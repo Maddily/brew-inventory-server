@@ -9,6 +9,26 @@ const {
   deleteProduct,
 } = require("../../controllers/productsController.js");
 
+jest.mock("express-validator", () => {
+  const chainable = {
+    if: jest.fn().mockReturnThis(),
+    isIn: jest.fn().mockReturnThis(),
+    trim: jest.fn().mockReturnThis(),
+    notEmpty: jest.fn().mockReturnThis(),
+    withMessage: jest.fn().mockReturnThis(),
+    isFloat: jest.fn().mockReturnThis(),
+    isInt: jest.fn().mockReturnThis(),
+    optional: jest.fn().mockReturnThis(),
+  };
+
+  return {
+    validationResult: jest.fn(),
+    matchedData: jest.fn(),
+    body: jest.fn(() => chainable),
+  };
+});
+const { validationResult, matchedData } = require("express-validator");
+
 describe("getProducts", () => {
   it("returns 500 status when the database throws an error", async () => {
     const req = { query: {} };
@@ -53,7 +73,12 @@ describe("getProducts", () => {
     ]);
 
     await getProducts(req, res);
-    expect(queries.getProducts).toHaveBeenCalledWith(undefined, undefined, undefined, {});
+    expect(queries.getProducts).toHaveBeenCalledWith(
+      undefined,
+      undefined,
+      undefined,
+      {}
+    );
     expect(res.json).toHaveBeenCalledWith([
       {
         id: 1,
@@ -98,7 +123,12 @@ describe("getProducts", () => {
     ]);
 
     await getProducts(req, res);
-    expect(queries.getProducts).toHaveBeenCalledWith(1, undefined, undefined, {});
+    expect(queries.getProducts).toHaveBeenCalledWith(
+      1,
+      undefined,
+      undefined,
+      {}
+    );
     expect(res.json).toHaveBeenCalledWith([
       {
         id: 1,
@@ -172,6 +202,11 @@ describe("addProduct", () => {
     };
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
 
+    validationResult.mockReturnValue({
+      isEmpty: () => true,
+    });
+    matchedData.mockReturnValue({});
+
     queries.addProduct.mockRejectedValue(new Error("Internal server error"));
 
     await addProduct(req, res);
@@ -183,45 +218,35 @@ describe("addProduct", () => {
     const req = { body: {} };
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
 
-    await addProduct(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      error: "Product details are required",
+    validationResult.mockReturnValue({
+      isEmpty: () => false,
+      array: () => [{ msg: "name is required" }],
     });
-  });
-
-  it("returns 400 status when attributes are missing", async () => {
-    const req = {
-      body: {
-        name: "espresso coffee",
-        price: 5,
-        stock_quantity: 50,
-        category_id: "1",
-      },
-    };
-    const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
 
     await addProduct(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
-      error: "Product attributes are required",
+      errors: [{ msg: "name is required" }],
     });
   });
 
   it("successfully adds a product when given the needed data", async () => {
-    const req = {
-      body: {
-        name: "espresso coffee",
-        price: 5,
-        stock_quantity: 50,
-        category_id: "1",
-        Origin: "Colombia",
-        "Roast Level": "Medium",
-        Format: "Whole Beans",
-        Weight: 250,
-      },
-    };
+    const req = {};
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
+
+    validationResult.mockReturnValue({
+      isEmpty: () => true,
+    });
+    matchedData.mockReturnValue({
+      name: "espresso coffee",
+      price: 5,
+      stock_quantity: 50,
+      category_id: "1",
+      Origin: "Colombia",
+      "Roast Level": "Medium",
+      Format: "Whole Beans",
+      Weight: 250,
+    });
 
     queries.addProduct.mockResolvedValue({
       id: 1,
@@ -238,7 +263,7 @@ describe("addProduct", () => {
       "espresso coffee",
       5,
       50,
-      1,
+      "1",
       {
         Origin: "Colombia",
         "Roast Level": "Medium",
@@ -264,6 +289,11 @@ describe("updateProduct", () => {
     const req = { params: { id: 1 }, body: { price: 6 } };
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
 
+    validationResult.mockReturnValue({
+      isEmpty: () => true,
+    });
+    matchedData.mockReturnValue({});
+
     queries.updateProduct.mockRejectedValue(new Error("Internal server error"));
 
     await updateProduct(req, res);
@@ -275,16 +305,26 @@ describe("updateProduct", () => {
     const req = { params: { id: 1 }, body: {} };
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
 
+    validationResult.mockReturnValue({
+      isEmpty: () => false,
+      array: () => [{ msg: "name is required" }],
+    });
+
     await updateProduct(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
-      error: "Must provide data to be updated",
+      errors: [{ msg: "name is required" }],
     });
   });
 
   it("returns 404 status if product isn't found", async () => {
     const req = { params: { id: 18 }, body: { price: 6 } };
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
+
+    validationResult.mockReturnValue({
+      isEmpty: () => true,
+    });
+    matchedData.mockReturnValue({});
 
     queries.updateProduct.mockRejectedValue(new Error("Product not found"));
 
@@ -296,34 +336,53 @@ describe("updateProduct", () => {
   });
 
   it("successfully updates a product", async () => {
-    const req = { params: { id: 1 }, body: { price: 6, category_id: "1" } };
+    const req = { params: { id: 1 } };
     const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
+
+    validationResult.mockReturnValue({
+      isEmpty: () => true,
+    });
+    matchedData.mockReturnValue({
+      name: "Espresso Coffee",
+      price: 6,
+      stock_quantity: 50,
+      category_id: "1",
+      Origin: "Colombia",
+      "Roast Level": "Medium",
+      Format: "Whole Beans",
+      Weight: 250,
+    });
 
     queries.updateProduct.mockResolvedValue({
       id: 1,
       name: "Espresso Coffee",
       description: "",
       price: 6,
-      stock_quantity: 32,
+      stock_quantity: 50,
       category_id: 1,
     });
 
     await updateProduct(req, res);
     expect(queries.updateProduct).toHaveBeenCalledWith({
       id: 1,
-      name: undefined,
+      name: "Espresso Coffee",
       description: undefined,
       price: 6,
-      stock_quantity: undefined,
+      stock_quantity: 50,
       category_id: 1,
-      attributes: {},
+      attributes: {
+        Origin: "Colombia",
+        "Roast Level": "Medium",
+        Format: "Whole Beans",
+        Weight: 250,
+      },
     });
     expect(res.json).toHaveBeenCalledWith({
       id: 1,
       name: "Espresso Coffee",
       description: "",
       price: 6,
-      stock_quantity: 32,
+      stock_quantity: 50,
       category_id: 1,
     });
   });
