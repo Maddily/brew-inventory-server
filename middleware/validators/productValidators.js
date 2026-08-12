@@ -1,4 +1,5 @@
 const { body } = require("express-validator");
+require("dotenv").config();
 
 const categoryAttributeKeys = {
   1: ["Origin", "Roast Level", "Format", "Weight"],
@@ -20,6 +21,8 @@ const attributeValidators = Object.entries(categoryAttributeKeys).flatMap(
     )
 );
 
+const password = process.env.ADMIN_PASSWORD;
+
 const validateProduct = [
   body("name").trim().notEmpty().withMessage(`Product name is required.`),
   body("description").trim().optional(),
@@ -28,6 +31,12 @@ const validateProduct = [
     .isInt({ min: 0 })
     .withMessage("Quantity can't be negative"),
   body("category_id").isInt({ min: 1, max: 4 }).withMessage("Invalid category"),
+  body("password")
+    .if(body("id").exists())
+    .trim()
+    .notEmpty()
+    .equals(password)
+    .withMessage("Incorrect password"),
   ...attributeValidators,
 ];
 
