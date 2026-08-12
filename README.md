@@ -107,6 +107,8 @@ npm install
 
 ```
 DATABASE_URL=postgresql://username:password@localhost:5432/brew_inventory
+PORT=3000
+ADMIN_PASSWORD=brew123
 ```
 
 4. Set up the database
