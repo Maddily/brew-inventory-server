@@ -94,6 +94,13 @@ async function updateProduct(req, res) {
 
 async function deleteProduct(req, res) {
   try {
+    // Handle admin password validation
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { id } = req.params;
 
     const product = await productQueries.deleteProduct(id);
