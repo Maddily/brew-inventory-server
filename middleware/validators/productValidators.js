@@ -40,9 +40,17 @@ const validateProduct = [
   ...attributeValidators,
 ];
 
+const validatePassword = [
+  body("password")
+    .trim()
+    .notEmpty()
+    .equals(password)
+    .withMessage("Incorrect password"),
+];
+
 function extractAttributes(data) {
   const keys = categoryAttributeKeys[data.category_id] || [];
   return Object.fromEntries(keys.map((key) => [key, data[key]]));
 }
 
-module.exports = { validateProduct, extractAttributes };
+module.exports = { validateProduct, validatePassword, extractAttributes };
