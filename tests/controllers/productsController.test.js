@@ -13,6 +13,8 @@ jest.mock("express-validator", () => {
   const chainable = {
     if: jest.fn().mockReturnThis(),
     isIn: jest.fn().mockReturnThis(),
+    exists: jest.fn().mockReturnThis(),
+    equals: jest.fn().mockReturnThis(),
     trim: jest.fn().mockReturnThis(),
     notEmpty: jest.fn().mockReturnThis(),
     withMessage: jest.fn().mockReturnThis(),
