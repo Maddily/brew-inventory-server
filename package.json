@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "jest",
+    "coverage": "jest --coverage",
     "db:init": "node db/init.js",
     "db:seed": "node db/seed.js"
   },
