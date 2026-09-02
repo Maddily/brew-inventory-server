@@ -48,9 +48,14 @@ const validatePassword = [
     .withMessage("Incorrect password"),
 ];
 
-function extractAttributes(data) {
+function extractAttributes(data, categoryAttributeKeys) {
   const keys = categoryAttributeKeys[data.category_id] || [];
   return Object.fromEntries(keys.map((key) => [key, data[key]]));
 }
 
-module.exports = { validateProduct, validatePassword, extractAttributes };
+module.exports = {
+  categoryAttributeKeys,
+  validateProduct,
+  validatePassword,
+  extractAttributes,
+};
