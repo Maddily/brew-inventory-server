@@ -2,6 +2,7 @@ const { validationResult, matchedData } = require("express-validator");
 const productQueries = require("../db/productQueries.js");
 const {
   extractAttributes,
+  categoryAttributeKeys,
 } = require("../middleware/validators/productValidators.js");
 
 async function getProducts(req, res) {
@@ -46,7 +47,7 @@ async function addProduct(req, res) {
 
     const data = matchedData(req);
     const { name, description, price, stock_quantity, category_id } = data;
-    const attributes = extractAttributes(data);
+    const attributes = extractAttributes(data, categoryAttributeKeys);
     const product = await productQueries.addProduct(
       name,
       price,
@@ -71,7 +72,7 @@ async function updateProduct(req, res) {
     const { id } = req.params;
     const data = matchedData(req);
     const { name, description, price, stock_quantity, category_id } = data;
-    const attributes = extractAttributes(data);
+    const attributes = extractAttributes(data, categoryAttributeKeys);
 
     const product = await productQueries.updateProduct({
       id,
