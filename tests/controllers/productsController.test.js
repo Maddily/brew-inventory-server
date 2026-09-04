@@ -43,34 +43,27 @@ describe("getProducts", () => {
     expect(res.json).toHaveBeenCalledWith({ error: "Internal server error" });
   });
 
-  it("returns products in all categories when no category id is provided", async () => {
+  it("returns whatever queries.getProducts resolves to", async () => {
     const req = { query: {} };
     const res = { json: jest.fn() };
 
     queries.getProducts.mockResolvedValue([
       {
         id: 1,
-        name: "espresso coffee",
-        description: "",
-        price: 20,
-        stock_quantity: 10,
-        category_id: 1,
       },
+    ]);
+
+    await getProducts(req, res);
+    expect(res.json).toHaveBeenCalledWith([{ id: 1 }]);
+  });
+
+  it("calls queries.getProducts with undefined when no category_id is provided", async () => {
+    const req = { query: {} };
+    const res = { json: jest.fn() };
+
+    queries.getProducts.mockResolvedValue([
       {
-        id: 2,
-        name: "red tea",
-        description: "",
-        price: 10,
-        stock_quantity: 30,
-        category_id: 2,
-      },
-      {
-        id: 3,
-        name: "green tea",
-        description: "",
-        price: 10,
-        stock_quantity: 25,
-        category_id: 2,
+        id: 1,
       },
     ]);
 
@@ -81,46 +74,15 @@ describe("getProducts", () => {
       undefined,
       {}
     );
-    expect(res.json).toHaveBeenCalledWith([
-      {
-        id: 1,
-        name: "espresso coffee",
-        description: "",
-        price: 20,
-        stock_quantity: 10,
-        category_id: 1,
-      },
-      {
-        id: 2,
-        name: "red tea",
-        description: "",
-        price: 10,
-        stock_quantity: 30,
-        category_id: 2,
-      },
-      {
-        id: 3,
-        name: "green tea",
-        description: "",
-        price: 10,
-        stock_quantity: 25,
-        category_id: 2,
-      },
-    ]);
   });
 
-  it("returns products of a category when category id is provided", async () => {
+  it("calls queries.getProducts with the given category_id", async () => {
     const req = { query: { category_id: 1 } };
     const res = { json: jest.fn() };
 
     queries.getProducts.mockResolvedValue([
       {
         id: 1,
-        name: "espresso coffee",
-        description: "",
-        price: 20,
-        stock_quantity: 10,
-        category_id: 1,
       },
     ]);
 
@@ -131,16 +93,84 @@ describe("getProducts", () => {
       undefined,
       {}
     );
-    expect(res.json).toHaveBeenCalledWith([
+  });
+
+  it("calls queries.getProducts with the given availability", async () => {
+    const req = { query: { availability: "In stock" } };
+    const res = { json: jest.fn() };
+
+    queries.getProducts.mockResolvedValue([
       {
         id: 1,
-        name: "espresso coffee",
-        description: "",
-        price: 20,
-        stock_quantity: 10,
-        category_id: 1,
       },
     ]);
+
+    await getProducts(req, res);
+    expect(queries.getProducts).toHaveBeenCalledWith(
+      undefined,
+      "In stock",
+      undefined,
+      {}
+    );
+  });
+
+  it("calls queries.getProducts with the given search term", async () => {
+    const req = { query: { search: "vanilla" } };
+    const res = { json: jest.fn() };
+
+    queries.getProducts.mockResolvedValue([
+      {
+        id: 1,
+      },
+    ]);
+
+    await getProducts(req, res);
+    expect(queries.getProducts).toHaveBeenCalledWith(
+      undefined,
+      undefined,
+      "vanilla",
+      {}
+    );
+  });
+
+  it("calls queries.getProducts with the given attributes", async () => {
+    const req = { query: { Base: "Coffee", Volume: "355" } };
+    const res = { json: jest.fn() };
+
+    queries.getProducts.mockResolvedValue([
+      {
+        id: 1,
+      },
+    ]);
+
+    await getProducts(req, res);
+    expect(queries.getProducts).toHaveBeenCalledWith(
+      undefined,
+      undefined,
+      undefined,
+      { Base: "Coffee", Volume: "355" }
+    );
+  });
+
+  it("calls queries.getProducts with all params combined correctly", async () => {
+    const req = {
+      query: {
+        category_id: 1,
+        availability: "In stock",
+        search: "vanilla",
+        Base: "Coffee",
+        Volume: "355",
+      },
+    };
+    const res = { json: jest.fn() };
+
+    queries.getProducts.mockResolvedValue([{ id: 1 }]);
+
+    await getProducts(req, res);
+    expect(queries.getProducts).toHaveBeenCalledWith(1, "In stock", "vanilla", {
+      Base: "Coffee",
+      Volume: "355",
+    });
   });
 });
 
