@@ -170,7 +170,7 @@ async function addProduct(
   const client = await pool.connect();
   await client.query("BEGIN");
   try {
-    const { rows } = await pool.query(
+    const { rows } = await client.query(
       `INSERT INTO products (name, description, price, stock_quantity, category_id)
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *`,
@@ -181,7 +181,7 @@ async function addProduct(
 
     // Add product attributes
     for (const [attrName, value] of Object.entries(attributes)) {
-      await pool.query(
+      await client.query(
         `INSERT INTO product_attributes (product_id, attribute_id, value)
       VALUES ($1, (SELECT id FROM attributes WHERE LOWER(name) = LOWER($2) AND category_id = $3), $4)`,
         [product.id, attrName, category_id, value]
@@ -206,9 +206,10 @@ async function updateProduct({
   category_id,
   attributes = {},
 }) {
-  await pool.query("BEGIN");
+  const client = await pool.connect();
+  await client.query("BEGIN");
   try {
-    const { rows, rowCount } = await pool.query(
+    const { rows, rowCount } = await client.query(
       `
       UPDATE products SET
         name = COALESCE($1, name),
@@ -228,7 +229,7 @@ async function updateProduct({
     const product = rows[0];
 
     for (const [attrName, value] of Object.entries(attributes)) {
-      await pool.query(
+      await client.query(
         `
       UPDATE product_attributes SET
         value = $1
@@ -242,11 +243,13 @@ async function updateProduct({
       );
     }
 
-    await pool.query("COMMIT");
+    await client.query("COMMIT");
     return product;
   } catch (error) {
-    await pool.query("ROLLBACK");
+    await client.query("ROLLBACK");
     throw error;
+  } finally {
+    client.release();
   }
 }
 
