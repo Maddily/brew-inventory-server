@@ -81,6 +81,8 @@ Four tables: `categories`, `products`, `attributes`, and `product_attributes`.
 
 The app uses an EAV pattern where each category defines its own set of attributes (e.g. Coffee has Origin, Roast Level, Format, Weight) stored in the `attributes` table, with per-product values stored in `product_attributes`. This keeps the `products` table clean and avoids sparse nullable columns.
 
+**Cascading deletes:** `products.category_id` and `attributes.category_id` both reference `categories.id` with `ON DELETE CASCADE`, and `product_attributes.product_id` cascades from `products.id`. Deleting a category deletes all of its products and their attributes. Category deletion isn't exposed in the frontend yet. This is backend-only groundwork for a future admin feature, which would warn the user before deleting a category with existing products.
+
 ## Getting started
 
 ### Prerequisites
