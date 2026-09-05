@@ -14,19 +14,19 @@ CREATE TABLE IF NOT EXISTS products (
   description TEXT DEFAULT '',
   price NUMERIC(10, 2) NOT NULL,
   stock_quantity INTEGER NOT NULL DEFAULT 0,
-  category_id INTEGER NOT NULL REFERENCES categories(id)
+  category_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS attributes (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name VARCHAR(100) NOT NULL,
-  category_id INTEGER NOT NULL REFERENCES categories(id)
+  category_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS product_attributes (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   product_id INTEGER NOT NULL references products(id) ON DELETE CASCADE,
-  attribute_id INTEGER NOT NULL references attributes(id),
+  attribute_id INTEGER NOT NULL references attributes(id) ON DELETE CASCADE,
   value VARCHAR(255) NOT NULL
 );
 `;
@@ -42,4 +42,8 @@ async function main() {
   console.log("done");
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = { main };
