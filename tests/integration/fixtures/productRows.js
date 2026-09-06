@@ -1,0 +1,332 @@
+// IDs assume seed order: ethiopia, colombia, brazil, sencha, mint, coldBrew, v60
+
+function ethiopiaRows() {
+  return [
+    {
+      id: 1,
+      name: "Ethiopia Yirgacheffe",
+      description: null,
+      price: "18.00",
+      stock_quantity: 42,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Origin",
+      attribute_value: "Ethiopia",
+    },
+    {
+      id: 1,
+      name: "Ethiopia Yirgacheffe",
+      description: null,
+      price: "18.00",
+      stock_quantity: 42,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Roast Level",
+      attribute_value: "Light",
+    },
+    {
+      id: 1,
+      name: "Ethiopia Yirgacheffe",
+      description: null,
+      price: "18.00",
+      stock_quantity: 42,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Format",
+      attribute_value: "Whole Bean",
+    },
+    {
+      id: 1,
+      name: "Ethiopia Yirgacheffe",
+      description: null,
+      price: "18.00",
+      stock_quantity: 42,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Weight",
+      attribute_value: "250",
+    },
+  ];
+}
+
+function colombiaRows() {
+  return [
+    {
+      id: 2,
+      name: "Colombia Huila",
+      description: null,
+      price: "16.00",
+      stock_quantity: 8,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Origin",
+      attribute_value: "Colombia",
+    },
+    {
+      id: 2,
+      name: "Colombia Huila",
+      description: null,
+      price: "16.00",
+      stock_quantity: 8,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Roast Level",
+      attribute_value: "Medium",
+    },
+    {
+      id: 2,
+      name: "Colombia Huila",
+      description: null,
+      price: "16.00",
+      stock_quantity: 8,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Format",
+      attribute_value: "Ground",
+    },
+    {
+      id: 2,
+      name: "Colombia Huila",
+      description: null,
+      price: "16.00",
+      stock_quantity: 8,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Weight",
+      attribute_value: "250",
+    },
+  ];
+}
+
+function brazilRows() {
+  return [
+    {
+      id: 3,
+      name: "Brazil Santos",
+      description: null,
+      price: "14.00",
+      stock_quantity: 0,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Origin",
+      attribute_value: "Brazil",
+    },
+    {
+      id: 3,
+      name: "Brazil Santos",
+      description: null,
+      price: "14.00",
+      stock_quantity: 0,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Roast Level",
+      attribute_value: "Dark",
+    },
+    {
+      id: 3,
+      name: "Brazil Santos",
+      description: null,
+      price: "14.00",
+      stock_quantity: 0,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Format",
+      attribute_value: "Whole Bean",
+    },
+    {
+      id: 3,
+      name: "Brazil Santos",
+      description: null,
+      price: "14.00",
+      stock_quantity: 0,
+      category_id: 1,
+      category: "Coffee",
+      attribute_name: "Weight",
+      attribute_value: "1000",
+    },
+  ];
+}
+
+function senchaRows() {
+  return [
+    {
+      id: 4,
+      name: "Japanese Sencha",
+      description: null,
+      price: "12.50",
+      stock_quantity: 15,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Type",
+      attribute_value: "Green",
+    },
+    {
+      id: 4,
+      name: "Japanese Sencha",
+      description: null,
+      price: "12.50",
+      stock_quantity: 15,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Origin",
+      attribute_value: "Japan",
+    },
+    {
+      id: 4,
+      name: "Japanese Sencha",
+      description: null,
+      price: "12.50",
+      stock_quantity: 15,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Format",
+      attribute_value: "Loose Leaf",
+    },
+    {
+      id: 4,
+      name: "Japanese Sencha",
+      description: null,
+      price: "12.50",
+      stock_quantity: 15,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Caffeine Level",
+      attribute_value: "Medium",
+    },
+    {
+      id: 4,
+      name: "Japanese Sencha",
+      description: null,
+      price: "12.50",
+      stock_quantity: 15,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Weight",
+      attribute_value: "100",
+    },
+  ];
+}
+
+function mintRows() {
+  return [
+    {
+      id: 5,
+      name: "Moroccan Mint",
+      description: null,
+      price: "9.00",
+      stock_quantity: 3,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Type",
+      attribute_value: "Herbal",
+    },
+    {
+      id: 5,
+      name: "Moroccan Mint",
+      description: null,
+      price: "9.00",
+      stock_quantity: 3,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Origin",
+      attribute_value: "Morocco",
+    },
+    {
+      id: 5,
+      name: "Moroccan Mint",
+      description: null,
+      price: "9.00",
+      stock_quantity: 3,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Format",
+      attribute_value: "Bagged",
+    },
+    {
+      id: 5,
+      name: "Moroccan Mint",
+      description: null,
+      price: "9.00",
+      stock_quantity: 3,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Caffeine Level",
+      attribute_value: "None",
+    },
+    {
+      id: 5,
+      name: "Moroccan Mint",
+      description: null,
+      price: "9.00",
+      stock_quantity: 3,
+      category_id: 2,
+      category: "Tea",
+      attribute_name: "Weight",
+      attribute_value: "30",
+    },
+  ];
+}
+
+function coldBrewRows() {
+  return [
+    {
+      id: 6,
+      name: "Cold Brew Original",
+      description: null,
+      price: "5.00",
+      stock_quantity: 20,
+      category_id: 3,
+      category: "Ready-to-Drink",
+      attribute_name: "Base",
+      attribute_value: "Coffee",
+    },
+    {
+      id: 6,
+      name: "Cold Brew Original",
+      description: null,
+      price: "5.00",
+      stock_quantity: 20,
+      category_id: 3,
+      category: "Ready-to-Drink",
+      attribute_name: "Volume",
+      attribute_value: "355",
+    },
+  ];
+}
+
+function v60Rows() {
+  return [
+    {
+      id: 7,
+      name: "Hario V60 Dripper",
+      description: null,
+      price: "22.00",
+      stock_quantity: 0,
+      category_id: 4,
+      category: "Accessories",
+      attribute_name: "Type",
+      attribute_value: "Dripper",
+    },
+    {
+      id: 7,
+      name: "Hario V60 Dripper",
+      description: null,
+      price: "22.00",
+      stock_quantity: 0,
+      category_id: 4,
+      category: "Accessories",
+      attribute_name: "Compatible With",
+      attribute_value: "Coffee",
+    },
+  ];
+}
+
+module.exports = {
+  ethiopiaRows,
+  colombiaRows,
+  brazilRows,
+  senchaRows,
+  mintRows,
+  coldBrewRows,
+  v60Rows,
+};
