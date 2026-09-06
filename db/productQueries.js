@@ -128,7 +128,7 @@ async function getProducts(
       JOIN attributes ON attributes.id = product_attributes.attribute_id
       ${whereSQL}
     )
-    ORDER BY products.category_id, products.name
+    ORDER BY products.category_id, products.name, attributes.id
     `;
 
   const { rows } = await pool.query(SQL, values);
