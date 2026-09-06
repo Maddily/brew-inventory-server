@@ -229,7 +229,7 @@ async function updateProduct({
     const product = rows[0];
 
     for (const [attrName, value] of Object.entries(attributes)) {
-      await client.query(
+      const { rowCount } = await client.query(
         `
       UPDATE product_attributes SET
         value = $1
@@ -241,6 +241,10 @@ async function updateProduct({
       `,
         [value, attrName, category_id, id]
       );
+
+      if (rowCount === 0) {
+        throw new Error(`Attribute "${attrName}" not found for this category`);
+      }
     }
 
     await client.query("COMMIT");
