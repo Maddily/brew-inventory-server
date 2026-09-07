@@ -2,7 +2,7 @@
 
 REST API for Brew Inventory, a full-stack inventory management app for a specialty tea and coffee store. Built with Node.js, Express, and PostgreSQL.
 
-> **Work in progress.** Deployment coming soon.
+**Live:** [brew-inventory.pages.dev](https://brew-inventory.pages.dev) · API: [brew-inventory-server.onrender.com](https://brew-inventory-server.onrender.com)
 
 ## Related repository
 
@@ -155,6 +155,14 @@ npm start
 ```
 
 The API will be running at `http://localhost:3000`.
+
+## Deployment
+
+- **Database:** [Neon](https://neon.tech) (serverless PostgreSQL)
+- **API:** [Render](https://render.com)
+- **Frontend:** [Cloudflare Pages](https://pages.dev)
+
+The API reads `DATABASE_URL`, `ADMIN_PASSWORD`, and `FRONTEND_URL` (for CORS) from environment variables set in Render's dashboard. The frontend's `VITE_API_URL` is set at build time in Cloudflare Pages and baked into the production bundle.
 
 ## Running tests
 
