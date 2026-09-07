@@ -1,4 +1,4 @@
-const { describe, expect, it } = require("@jest/globals");
+const { describe, expect, test } = require("@jest/globals");
 const request = require("supertest");
 const { main: seedData } = require("../../db/seed.js");
 const { app } = require("../../app.js");
@@ -8,7 +8,7 @@ beforeEach(async () => {
 });
 
 describe("categories routes", () => {
-  it("GET /api/categories reaches getCategories and returns real data", async () => {
+  test("GET /api/categories reaches getCategories and returns real data", async () => {
     const res = await request(app).get("/api/categories");
     expect(res.body).toEqual([
       {
@@ -37,7 +37,7 @@ describe("categories routes", () => {
       },
     ]);
   });
-  it("GET /api/categories/:id reaches getCategory and returns the right category", async () => {
+  test("GET /api/categories/:id reaches getCategory and returns the right category", async () => {
     const res = await request(app).get("/api/categories/1");
     expect(res.body).toEqual({
       id: 1,
@@ -45,7 +45,7 @@ describe("categories routes", () => {
       description: expect.any(String),
     });
   });
-  it("POST /api/categories reaches addCategory and creates a real category", async () => {
+  test("POST /api/categories reaches addCategory and creates a real category", async () => {
     const postRes = await request(app)
       .post("/api/categories")
       .send({ name: "Syrups", description: "Delicious syrups" });
@@ -60,7 +60,7 @@ describe("categories routes", () => {
     const getRes = await request(app).get("/api/categories/5");
     expect(getRes.body).toEqual(postRes.body);
   });
-  it("PUT /api/categories/:id reaches updateCategory and updates a real category", async () => {
+  test("PUT /api/categories/:id reaches updateCategory and updates a real category", async () => {
     const putRes = await request(app)
       .put("/api/categories/4")
       .send({ name: "Syrups" });
@@ -75,7 +75,7 @@ describe("categories routes", () => {
     const getRes = await request(app).get("/api/categories/4");
     expect(getRes.body).toEqual(putRes.body);
   });
-  it("DELETE /api/categories/:id reaches deleteCategory and deletes a real category", async () => {
+  test("DELETE /api/categories/:id reaches deleteCategory and deletes a real category", async () => {
     const deleteRes = await request(app).delete("/api/categories/4");
     expect(deleteRes.status).toBe(200);
 
