@@ -13,7 +13,11 @@ app.use(express.json());
 app.use("/api/categories", categoriesRouter);
 app.use("/api/products", productsRouter);
 
-app.listen(PORT, (error) => {
-  if (error) throw error;
-  console.log("App is running...");
-});
+if (require.main === module) {
+  app.listen(PORT, (error) => {
+    if (error) throw error;
+    console.log("App is running...");
+  });
+}
+
+module.exports = { app };
