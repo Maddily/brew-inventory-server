@@ -1,0 +1,12 @@
+name: Keep server alive
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping server
+        run: curl -f https://brew-inventory-server.onrender.com/api/categories
