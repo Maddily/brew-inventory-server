@@ -4,6 +4,8 @@ REST API for Brew Inventory, a full-stack inventory management app for a special
 
 **Live:** [brew-inventory.pages.dev](https://brew-inventory.pages.dev) · API: [brew-inventory-server.onrender.com](https://brew-inventory-server.onrender.com)
 
+> **Note:** The backend is hosted on Render's free tier, which spins down after inactivity. The first request after idle may take 30–50 seconds while the server wakes up. Subsequent requests are fast.
+
 ## Related repository
 
 [brew-inventory-client](https://github.com/Maddily/brew-inventory-client) — React frontend
