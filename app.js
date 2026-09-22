@@ -21,6 +21,7 @@ app.use(express.json());
 
 app.use("/api/categories", categoriesRouter);
 app.use("/api/products", productsRouter);
+app.get("/health", (req, res) => res.status(200).send("OK"));
 
 if (require.main === module) {
   app.listen(PORT, (error) => {
