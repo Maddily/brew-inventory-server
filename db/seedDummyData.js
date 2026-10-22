@@ -136,4 +136,8 @@ async function main() {
   console.log("done");
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = { main };
