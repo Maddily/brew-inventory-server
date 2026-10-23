@@ -65,8 +65,10 @@ REST API for Brew Inventory, a full-stack inventory management app for a special
         ├── globalSetup.js
         ├── loadTestEnv.js
         ├── setupPerFile.js
+    ├── .dockerignore
     ├── .gitignore
     ├── app.js
+    ├── Dockerfile
     ├── jest.config.js
     ├── package-lock.json
     ├── package.json
