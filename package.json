@@ -7,7 +7,7 @@
     "start": "node app.js",
     "test": "jest tests/controllers tests/middleware",
     "test:integration": "jest tests/integration --runInBand",
-    "coverage": "jest --coverage",
+    "coverage": "jest --coverage --runInBand",
     "db:init": "node db/init.js",
     "db:seed": "node db/seed.js"
   },
