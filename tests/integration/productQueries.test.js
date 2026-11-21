@@ -219,15 +219,15 @@ describe("retrieving all products", () => {
       ).toEqual([...brazilRows(), ...colombiaRows(), ...ethiopiaRows()]);
     });
 
-    it("does not break when an attribute key contains SQL-meaningful characters", async () => {
+    it("does not bypass filtering when an attribute key contains SQL-meaningful characters", async () => {
       expect(
-        await getProducts(null, null, null, { "Origin' OR '1'='1": "value" })
+        await getProducts(null, null, null, { "Origin') OR ('1'='1": "value" })
       ).toEqual([]);
     });
 
     it("does not bypass filtering when an attribute value contains SQL-meaningful characters", async () => {
       expect(
-        await getProducts(null, null, null, { Origin: "Ethiopia' OR '1'='1" })
+        await getProducts(null, null, null, { Origin: "Ethiopia') OR ('1'='1" })
       ).toEqual([]);
     });
   });
